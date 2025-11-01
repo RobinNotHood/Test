@@ -73,17 +73,20 @@ None - fully backward compatible
 ### Standalone Executable (Recommended)
 **File**: `VRCapabilityChecker.exe` (69 MB)
 
-**To create a GitHub Release:**
+**Direct Download**:
+[Download VRCapabilityChecker.exe](https://github.com/RobinNotHood/Test/raw/claude/vr-capability-checker-011CUhS97H1XKUESfcEkyZr4/dist/VRCapabilityChecker.exe)
+
+**Alternative - Create a GitHub Release:**
 1. Go to GitHub repository → Releases → Create new release
 2. Tag: `v2.0`
 3. Title: `VR Capability Checker v2.0 - FPS Estimation & GPU Detection Fix`
-4. Upload `Release/VRCapabilityChecker.exe`
-5. Upload `Release/README.md`
+4. Upload `dist/VRCapabilityChecker.exe`
+5. Upload `dist/README.md`
 6. Copy this RELEASE_NOTES.md content into the description
 
-**Direct Download** (after GitHub release is created):
-- Main executable: `VRCapabilityChecker.exe`
-- Documentation: See Release/README.md
+**Files Location**:
+- Main executable: `dist/VRCapabilityChecker.exe`
+- Documentation: `dist/README.md`
 
 ### Build from Source
 ```bash

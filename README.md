@@ -6,7 +6,7 @@ An interactive Windows application that analyzes your system's hardware and dete
 
 ## 📥 Quick Download (No Installation Required!)
 
-**[Download VRCapabilityChecker.exe (69 MB)](Release/VRCapabilityChecker.exe)**
+**[Download VRCapabilityChecker.exe (69 MB)](https://github.com/RobinNotHood/Test/raw/claude/vr-capability-checker-011CUhS97H1XKUESfcEkyZr4/dist/VRCapabilityChecker.exe)**
 
 - ✅ Self-contained executable (includes .NET runtime)
 - ✅ No installation needed - just download and run
@@ -14,12 +14,12 @@ An interactive Windows application that analyzes your system's hardware and dete
 - ✅ No administrator rights required
 
 **Quick Start:**
-1. Download the .exe file from the link above
-2. Double-click to run
+1. Click the download link above to get the .exe file
+2. Double-click `VRCapabilityChecker.exe` to run
 3. Click "Scan System" to check your VR readiness
 4. View detailed results in three tabs
 
-See the [Release folder](Release/) for more details.
+See the [dist folder](dist/) for more details and documentation.
 
 ## Features
 
