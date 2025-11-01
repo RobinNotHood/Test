@@ -4,35 +4,69 @@ An interactive Windows application that analyzes your system's hardware and dete
 
 ![VR Capability Checker](screenshot.png)
 
+## 📥 Quick Download (No Installation Required!)
+
+**[Download VRCapabilityChecker.exe (69 MB)](Release/VRCapabilityChecker.exe)**
+
+- ✅ Self-contained executable (includes .NET runtime)
+- ✅ No installation needed - just download and run
+- ✅ Works on Windows 10/11 (64-bit)
+- ✅ No administrator rights required
+
+**Quick Start:**
+1. Download the .exe file from the link above
+2. Double-click to run
+3. Click "Scan System" to check your VR readiness
+4. View detailed results in three tabs
+
+See the [Release folder](Release/) for more details.
+
 ## Features
 
 - **Comprehensive Hardware Detection**
   - CPU cores, threads, and clock speed
-  - GPU model and VRAM
+  - GPU model and VRAM (prioritizes discrete GPUs over integrated graphics)
   - System RAM (total and available)
   - USB 3.0+ controller detection
   - DirectX version
   - Operating system details
 
-- **High-End VR Headset Support**
+- **High-End VR Headset Support (8 Headsets)**
   - Meta Quest 3 (PC VR)
   - Valve Index
   - HTC Vive Pro 2
   - Pimax Crystal
   - Varjo Aero
   - HP Reverb G2
+  - BigScreen Beyond
+  - BigScreen Beyond 2
+
+- **FPS Estimation for Popular VR Games (NEW!)**
+  - VRChat
+  - Half-Life: Alyx
+  - Beat Saber
+  - Boneworks
+  - Microsoft Flight Simulator VR
+  - DCS World VR
+  - Skyrim VR
+  - No Man's Sky VR
+  - Pavlov VR
+  - Contractors VR
+
+  Each game shows estimated FPS, performance level, and recommended settings based on your hardware.
 
 - **Detailed Compatibility Analysis**
   - Component-by-component compatibility checking
   - Visual pass/fail indicators
   - Minimum vs. current specifications
-  - Overall readiness score
+  - Overall VR readiness score
 
-- **Modern User Interface**
+- **Modern Tabbed User Interface**
   - Dark-themed, professional design
-  - Easy-to-read results
+  - Three organized tabs: System Info, VR Compatibility, FPS Estimates
+  - Easy-to-read results with color-coded indicators
   - Interactive scanning
-  - Color-coded status indicators
+  - Resizable window
 
 ## Requirements
 

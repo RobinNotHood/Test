@@ -20,35 +20,31 @@ namespace VRCapabilityChecker
             ScanButton.IsEnabled = false;
             ScanButton.Content = "Scanning...";
 
-            // Clear previous results
-            ResultsPanel.Children.Clear();
-            StatusBorder.Visibility = Visibility.Collapsed;
+            // Hide initial message, show tabs
+            InitialMessage.Visibility = Visibility.Collapsed;
+            ResultsTabs.Visibility = Visibility.Visible;
 
-            // Show loading indicator
-            var loadingText = new TextBlock
-            {
-                Text = "Analyzing your system...",
-                FontSize = 16,
-                Foreground = (Brush)FindResource("TextBrush"),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 50, 0, 0)
-            };
-            ResultsPanel.Children.Add(loadingText);
+            // Clear previous results
+            SystemInfoPanel.Children.Clear();
+            VRCompatibilityPanel.Children.Clear();
+            FPSEstimatesPanel.Children.Clear();
+            StatusBorder.Visibility = Visibility.Collapsed;
 
             // Perform scan asynchronously
             await Task.Run(() => System.Threading.Thread.Sleep(1000)); // Brief delay for UX
 
             var systemInfo = SystemInfoChecker.GetSystemInfo();
             var vrResults = VRRequirements.CheckVRReadiness(systemInfo);
-
-            // Clear loading
-            ResultsPanel.Children.Clear();
+            var fpsEstimates = FPSEstimator.EstimateFPS(systemInfo);
 
             // Display system info
             DisplaySystemInfo(systemInfo);
 
             // Display VR readiness results
             DisplayVRResults(vrResults);
+
+            // Display FPS estimates
+            DisplayFPSEstimates(fpsEstimates);
 
             // Show overall status
             ShowOverallStatus(vrResults);
@@ -60,9 +56,6 @@ namespace VRCapabilityChecker
 
         private void DisplaySystemInfo(SystemInfo info)
         {
-            var header = CreateSectionHeader("System Information");
-            ResultsPanel.Children.Add(header);
-
             var grid = new Grid { Margin = new Thickness(0, 10, 0, 20) };
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
@@ -80,18 +73,144 @@ namespace VRCapabilityChecker
             AddInfoRow(grid, row++, "DirectX:", info.DirectXVersion);
             AddInfoRow(grid, row++, "USB 3.0:", info.HasUSB3 ? "Available" : "Not Detected");
 
-            ResultsPanel.Children.Add(grid);
+            SystemInfoPanel.Children.Add(grid);
         }
 
         private void DisplayVRResults(System.Collections.Generic.List<VRReadinessResult> results)
         {
-            var header = CreateSectionHeader("VR Headset Compatibility");
-            ResultsPanel.Children.Add(header);
-
             foreach (var result in results)
             {
                 var headsetPanel = CreateHeadsetPanel(result);
-                ResultsPanel.Children.Add(headsetPanel);
+                VRCompatibilityPanel.Children.Add(headsetPanel);
+            }
+        }
+
+        private void DisplayFPSEstimates(System.Collections.Generic.List<FPSEstimate> estimates)
+        {
+            var header = new TextBlock
+            {
+                Text = "Expected FPS in Popular VR Games",
+                FontSize = 20,
+                FontWeight = FontWeights.Bold,
+                Foreground = (Brush)FindResource("PrimaryBrush"),
+                Margin = new Thickness(0, 0, 0, 15)
+            };
+            FPSEstimatesPanel.Children.Add(header);
+
+            var description = new TextBlock
+            {
+                Text = "Estimated frame rates based on your hardware configuration. Actual performance may vary based on settings and optimizations.",
+                FontSize = 12,
+                Foreground = (Brush)FindResource("TextBrush"),
+                Opacity = 0.7,
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 0, 0, 20)
+            };
+            FPSEstimatesPanel.Children.Add(description);
+
+            foreach (var estimate in estimates.OrderByDescending(e => e.EstimatedFPS))
+            {
+                var gamePanel = CreateFPSPanel(estimate);
+                FPSEstimatesPanel.Children.Add(gamePanel);
+            }
+        }
+
+        private Border CreateFPSPanel(FPSEstimate estimate)
+        {
+            var border = new Border
+            {
+                Background = (Brush)FindResource("SurfaceBrush"),
+                CornerRadius = new CornerRadius(5),
+                Padding = new Thickness(15),
+                Margin = new Thickness(0, 0, 0, 10)
+            };
+
+            var grid = new Grid();
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+            // Game name
+            var gameName = new TextBlock
+            {
+                Text = estimate.GameName,
+                FontSize = 16,
+                FontWeight = FontWeights.SemiBold,
+                Foreground = (Brush)FindResource("TextBrush"),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            Grid.SetColumn(gameName, 0);
+            grid.Children.Add(gameName);
+
+            // Details
+            var details = new TextBlock
+            {
+                Text = estimate.Details,
+                FontSize = 12,
+                Foreground = (Brush)FindResource("TextBrush"),
+                Opacity = 0.7,
+                VerticalAlignment = VerticalAlignment.Center,
+                TextWrapping = TextWrapping.Wrap
+            };
+            Grid.SetColumn(details, 1);
+            grid.Children.Add(details);
+
+            // FPS badge
+            var fpsPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            var fpsText = new TextBlock
+            {
+                Text = $"{estimate.EstimatedFPS} FPS",
+                FontSize = 18,
+                FontWeight = FontWeights.Bold,
+                Foreground = GetFPSColor(estimate.EstimatedFPS),
+                Margin = new Thickness(0, 0, 10, 0)
+            };
+            fpsPanel.Children.Add(fpsText);
+
+            var performanceText = new TextBlock
+            {
+                Text = estimate.PerformanceLevel,
+                FontSize = 14,
+                FontWeight = FontWeights.SemiBold,
+                Foreground = GetPerformanceColor(estimate.PerformanceLevel),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            fpsPanel.Children.Add(performanceText);
+
+            Grid.SetColumn(fpsPanel, 2);
+            grid.Children.Add(fpsPanel);
+
+            border.Child = grid;
+            return border;
+        }
+
+        private Brush GetFPSColor(int fps)
+        {
+            if (fps >= 120) return (Brush)FindResource("SuccessBrush");
+            if (fps >= 90) return new SolidColorBrush(Color.FromRgb(139, 195, 74)); // Light green
+            if (fps >= 70) return (Brush)FindResource("WarningBrush");
+            return (Brush)FindResource("ErrorBrush");
+        }
+
+        private Brush GetPerformanceColor(string level)
+        {
+            switch (level)
+            {
+                case "Excellent":
+                case "Great":
+                    return (Brush)FindResource("SuccessBrush");
+                case "Good":
+                    return new SolidColorBrush(Color.FromRgb(139, 195, 74)); // Light green
+                case "Fair":
+                    return (Brush)FindResource("WarningBrush");
+                default:
+                    return (Brush)FindResource("ErrorBrush");
             }
         }
 

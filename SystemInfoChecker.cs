@@ -84,6 +84,8 @@ namespace VRCapabilityChecker
         {
             try
             {
+                var gpuList = new List<(string name, long vram, string driver, int priority)>();
+
                 using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
                 {
                     foreach (ManagementObject obj in searcher.Get())
@@ -94,64 +96,144 @@ namespace VRCapabilityChecker
                         if (name.Contains("Microsoft Basic") || name.Contains("Remote Desktop"))
                             continue;
 
-                        info.GPUName = name;
-
+                        long vram = 0;
                         var adapterRAM = obj["AdapterRAM"];
                         if (adapterRAM != null)
                         {
                             try
                             {
-                                info.GPUMemoryMB = Convert.ToInt64(adapterRAM) / (1024 * 1024);
+                                vram = Convert.ToInt64(adapterRAM) / (1024 * 1024);
                             }
                             catch
                             {
-                                // If conversion fails, try to get from dedicated video memory
-                                var dedicatedMemory = obj["AdapterDACType"];
-                                info.GPUMemoryMB = 0;
+                                vram = 0;
                             }
                         }
 
-                        info.GPUDriverVersion = obj["DriverVersion"]?.ToString() ?? "Unknown";
-                        break;
+                        var driver = obj["DriverVersion"]?.ToString() ?? "Unknown";
+
+                        // Calculate priority (higher = better)
+                        int priority = CalculateGPUPriority(name, vram);
+
+                        gpuList.Add((name, vram, driver, priority));
                     }
                 }
 
-                // If no VRAM detected, try alternative method
-                if (info.GPUMemoryMB == 0)
+                // Select GPU with highest priority (discrete GPU over integrated)
+                if (gpuList.Count > 0)
                 {
-                    try
-                    {
-                        using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
-                        {
-                            foreach (ManagementObject obj in searcher.Get())
-                            {
-                                var name = obj["Name"]?.ToString() ?? "";
-                                if (name.Contains("Microsoft Basic") || name.Contains("Remote Desktop"))
-                                    continue;
+                    var bestGPU = gpuList.OrderByDescending(g => g.priority).First();
+                    info.GPUName = bestGPU.name;
+                    info.GPUMemoryMB = bestGPU.vram;
+                    info.GPUDriverVersion = bestGPU.driver;
 
-                                // Estimate based on GPU model name if detection fails
-                                if (name.Contains("RTX 4090")) info.GPUMemoryMB = 24576;
-                                else if (name.Contains("RTX 4080")) info.GPUMemoryMB = 16384;
-                                else if (name.Contains("RTX 4070")) info.GPUMemoryMB = 12288;
-                                else if (name.Contains("RTX 3090")) info.GPUMemoryMB = 24576;
-                                else if (name.Contains("RTX 3080")) info.GPUMemoryMB = 10240;
-                                else if (name.Contains("RTX 3070")) info.GPUMemoryMB = 8192;
-                                else if (name.Contains("RTX 3060")) info.GPUMemoryMB = 12288;
-                                else if (name.Contains("RX 7900 XTX")) info.GPUMemoryMB = 24576;
-                                else if (name.Contains("RX 7900 XT")) info.GPUMemoryMB = 20480;
-                                else if (name.Contains("RX 6900")) info.GPUMemoryMB = 16384;
-                                else if (name.Contains("RX 6800")) info.GPUMemoryMB = 16384;
-                                break;
-                            }
-                        }
+                    // If no VRAM detected, estimate based on GPU model name
+                    if (info.GPUMemoryMB == 0 && !string.IsNullOrEmpty(bestGPU.name))
+                    {
+                        if (bestGPU.name.Contains("RTX 5090")) info.GPUMemoryMB = 24576;
+                        else if (bestGPU.name.Contains("RTX 4090")) info.GPUMemoryMB = 24576;
+                        else if (bestGPU.name.Contains("RTX 4080")) info.GPUMemoryMB = 16384;
+                        else if (bestGPU.name.Contains("RTX 4070 Ti")) info.GPUMemoryMB = 12288;
+                        else if (bestGPU.name.Contains("RTX 4070")) info.GPUMemoryMB = 12288;
+                        else if (bestGPU.name.Contains("RTX 3090")) info.GPUMemoryMB = 24576;
+                        else if (bestGPU.name.Contains("RTX 3080 Ti")) info.GPUMemoryMB = 12288;
+                        else if (bestGPU.name.Contains("RTX 3080")) info.GPUMemoryMB = 10240;
+                        else if (bestGPU.name.Contains("RTX 3070")) info.GPUMemoryMB = 8192;
+                        else if (bestGPU.name.Contains("RTX 3060")) info.GPUMemoryMB = 12288;
+                        else if (bestGPU.name.Contains("RX 7900 XTX")) info.GPUMemoryMB = 24576;
+                        else if (bestGPU.name.Contains("RX 7900 XT")) info.GPUMemoryMB = 20480;
+                        else if (bestGPU.name.Contains("RX 6900")) info.GPUMemoryMB = 16384;
+                        else if (bestGPU.name.Contains("RX 6800")) info.GPUMemoryMB = 16384;
                     }
-                    catch { }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error getting GPU info: {ex.Message}");
             }
+        }
+
+        private static int CalculateGPUPriority(string gpuName, long vram)
+        {
+            var name = gpuName.ToUpper();
+            int priority = 0;
+
+            // NVIDIA discrete GPUs (highest priority)
+            if (name.Contains("NVIDIA") && name.Contains("RTX"))
+            {
+                priority = 1000;
+                if (name.Contains("5090")) priority += 500;
+                else if (name.Contains("5080")) priority += 450;
+                else if (name.Contains("5070")) priority += 400;
+                else if (name.Contains("4090")) priority += 490;
+                else if (name.Contains("4080")) priority += 440;
+                else if (name.Contains("4070")) priority += 390;
+                else if (name.Contains("3090")) priority += 480;
+                else if (name.Contains("3080")) priority += 430;
+                else if (name.Contains("3070")) priority += 380;
+                else if (name.Contains("3060")) priority += 360;
+                else if (name.Contains("2080")) priority += 280;
+                else if (name.Contains("2070")) priority += 270;
+                else if (name.Contains("2060")) priority += 260;
+            }
+            else if (name.Contains("NVIDIA") && name.Contains("GTX"))
+            {
+                priority = 900;
+                if (name.Contains("1080")) priority += 180;
+                else if (name.Contains("1070")) priority += 170;
+                else if (name.Contains("1660")) priority += 166;
+                else if (name.Contains("1060")) priority += 160;
+            }
+            else if (name.Contains("NVIDIA") && !name.Contains("INTEL"))
+            {
+                priority = 850; // Other NVIDIA discrete
+            }
+            // AMD discrete GPUs (high priority)
+            else if ((name.Contains("AMD") || name.Contains("RADEON")) && name.Contains("RX"))
+            {
+                priority = 950;
+                if (name.Contains("7900")) priority += 490;
+                else if (name.Contains("7800")) priority += 480;
+                else if (name.Contains("7700")) priority += 470;
+                else if (name.Contains("6950")) priority += 450;
+                else if (name.Contains("6900")) priority += 440;
+                else if (name.Contains("6800")) priority += 430;
+                else if (name.Contains("6700")) priority += 420;
+                else if (name.Contains("6600")) priority += 410;
+                else if (name.Contains("5700")) priority += 370;
+                else if (name.Contains("5600")) priority += 360;
+            }
+            else if ((name.Contains("AMD") || name.Contains("RADEON")) && name.Contains("VEGA"))
+            {
+                priority = 800;
+            }
+            // Intel integrated graphics (low priority)
+            else if (name.Contains("INTEL") && (name.Contains("UHD") || name.Contains("IRIS") || name.Contains("HD GRAPHICS")))
+            {
+                priority = 100; // Very low priority for integrated
+            }
+            // Intel Arc discrete GPUs (medium-high priority)
+            else if (name.Contains("INTEL") && name.Contains("ARC"))
+            {
+                priority = 700;
+            }
+            // Unknown but has significant VRAM (likely discrete)
+            else if (vram >= 4096) // 4GB or more
+            {
+                priority = 500;
+            }
+            else
+            {
+                priority = 200; // Generic/unknown
+            }
+
+            // Bonus for higher VRAM (indicates discrete GPU)
+            if (vram >= 16384) priority += 50; // 16GB+
+            else if (vram >= 12288) priority += 40; // 12GB+
+            else if (vram >= 8192) priority += 30; // 8GB+
+            else if (vram >= 6144) priority += 20; // 6GB+
+
+            return priority;
         }
 
         private static void GetRAMInfo(SystemInfo info)

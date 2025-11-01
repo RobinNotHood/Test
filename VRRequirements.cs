@@ -112,6 +112,30 @@ namespace VRCapabilityChecker
                     RequiresUSB3 = true,
                     MinDirectX = "11",
                     Requires64Bit = true
+                },
+                new VRHeadsetRequirements
+                {
+                    Name = "BigScreen Beyond",
+                    MinCPUCores = 4,
+                    MinCPUSpeedGHz = 3.0,
+                    MinRAMGB = 16,
+                    MinGPUMemoryMB = 8192, // 8GB
+                    RecommendedGPUs = new List<string> { "RTX 3070", "RTX 2080", "RX 6700 XT" },
+                    RequiresUSB3 = true,
+                    MinDirectX = "11",
+                    Requires64Bit = true
+                },
+                new VRHeadsetRequirements
+                {
+                    Name = "BigScreen Beyond 2",
+                    MinCPUCores = 6,
+                    MinCPUSpeedGHz = 3.5,
+                    MinRAMGB = 16,
+                    MinGPUMemoryMB = 12288, // 12GB
+                    RecommendedGPUs = new List<string> { "RTX 4070", "RTX 3080", "RX 7800 XT" },
+                    RequiresUSB3 = true,
+                    MinDirectX = "12",
+                    Requires64Bit = true
                 }
             };
         }
@@ -233,6 +257,10 @@ namespace VRCapabilityChecker
                 return false;
 
             var gpu = currentGPU.ToUpper();
+
+            // NVIDIA RTX 50 series - Next-gen VR ready
+            if (gpu.Contains("RTX 5090") || gpu.Contains("RTX 5080") || gpu.Contains("RTX 5070"))
+                return true;
 
             // NVIDIA RTX 40 series - All good for high-end VR
             if (gpu.Contains("RTX 4090") || gpu.Contains("RTX 4080") || gpu.Contains("RTX 4070"))
