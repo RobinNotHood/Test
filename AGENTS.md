@@ -17,7 +17,7 @@ A German-language business management app for Galvomag AG (Swiss tank & boiler s
 - `npm run dev` — Start dev server on port 3000
 - `npm run build` — Production build
 - `npx eslint src/` — Lint check
-- Database is auto-seeded on first API request (20 Swiss test locations with full data)
+- Database is auto-seeded on first API request (50 Swiss locations with extensive test data)
 
 **Architecture:**
 - `src/app/` — Next.js App Router pages (Dashboard, Standorte, Aufträge, Routenplanung)
