@@ -50,9 +50,9 @@ export default function StandortePage() {
         <p className="text-[var(--color-text-muted)] text-sm">Alle Standorte verwalten und filtern</p>
       </div>
 
-      <div className="bg-[var(--color-card)] rounded-lg shadow-sm border border-[var(--color-border)] p-4 mb-6">
-        <div className="flex flex-wrap gap-3 items-center">
-          <div className="relative flex-1 min-w-[200px]">
+      <div className="bg-[var(--color-card)] rounded-lg shadow-sm border border-[var(--color-border)] p-3 md:p-4 mb-4 md:mb-6">
+        <div className="flex flex-wrap gap-2 md:gap-3 items-center">
+          <div className="relative w-full md:flex-1 md:min-w-[200px]">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]" />
             <input
               type="text"

@@ -1,13 +1,13 @@
 {
-  "/api/seed/route": "/api/seed",
   "/_not-found/page": "/_not-found",
-  "/api/dashboard/route": "/api/dashboard",
+  "/api/seed/route": "/api/seed",
   "/api/auftraege/route": "/api/auftraege",
   "/api/standorte/[id]/route": "/api/standorte/[id]",
   "/api/standorte/route": "/api/standorte",
+  "/api/dashboard/route": "/api/dashboard",
   "/auftraege/page": "/auftraege",
-  "/routen/page": "/routen",
   "/page": "/",
-  "/standorte/page": "/standorte",
-  "/standorte/[id]/page": "/standorte/[id]"
+  "/routen/page": "/routen",
+  "/standorte/[id]/page": "/standorte/[id]",
+  "/standorte/page": "/standorte"
 }

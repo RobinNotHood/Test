@@ -79,7 +79,7 @@ export default function AuftraegePage() {
             <option value="Filterwechsel">Filterwechsel</option>
           </select>
 
-          <div className="ml-auto flex items-center gap-4 text-sm">
+          <div className="w-full md:w-auto md:ml-auto flex items-center gap-4 text-sm mt-2 md:mt-0">
             <span className="text-[var(--color-text-muted)]">{auftraege.length} Aufträge</span>
             {totalBetrag > 0 && (
               <span className="font-medium text-green-600">
@@ -97,7 +97,7 @@ export default function AuftraegePage() {
             <span className="text-sm text-[var(--color-text-muted)]">{items.length} Aufträge</span>
           </h2>
           <div className="bg-[var(--color-card)] rounded-lg shadow-sm border border-[var(--color-border)] overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm min-w-[700px]">
               <thead className="bg-gray-50 text-left">
                 <tr>
                   <th className="px-4 py-3 font-medium">ID</th>

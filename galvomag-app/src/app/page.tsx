@@ -55,7 +55,7 @@ export default function DashboardPage() {
         <p className="text-[var(--color-text-muted)] text-sm">Übersicht aller Aufträge und Standorte</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
         <StatCard icon={Building2} label="Standorte" value={data.totalStandorte} color="bg-blue-500" />
         <StatCard icon={ClipboardList} label="Offene Aufträge" value={data.totalAuftraege} color="bg-orange-500" />
         <StatCard icon={Clock} label="Angebote offen" value={data.angeboteOffen} color="bg-yellow-500" />
@@ -63,7 +63,7 @@ export default function DashboardPage() {
         <StatCard icon={CheckCircle} label="Erledigt" value={data.erledigte} color="bg-emerald-500" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
         <div className="bg-[var(--color-card)] rounded-lg shadow-sm p-5 border border-[var(--color-border)]">
           <h2 className="font-semibold text-lg mb-4">Aufträge nach Typ</h2>
           <div className="space-y-3">
@@ -155,13 +155,13 @@ export default function DashboardPage() {
 
 function StatCard({ icon: Icon, label, value, color }: { icon: React.ComponentType<{ size?: number }>; label: string; value: number; color: string }) {
   return (
-    <div className="bg-[var(--color-card)] rounded-lg shadow-sm p-4 border border-[var(--color-border)] flex items-center gap-4">
-      <div className={`${color} p-3 rounded-lg text-white`}>
-        <Icon size={22} />
+    <div className="bg-[var(--color-card)] rounded-lg shadow-sm p-3 md:p-4 border border-[var(--color-border)] flex items-center gap-3">
+      <div className={`${color} p-2 md:p-3 rounded-lg text-white shrink-0`}>
+        <Icon size={18} />
       </div>
-      <div>
-        <div className="text-2xl font-bold">{value}</div>
-        <div className="text-xs text-[var(--color-text-muted)]">{label}</div>
+      <div className="min-w-0">
+        <div className="text-xl md:text-2xl font-bold">{value}</div>
+        <div className="text-[10px] md:text-xs text-[var(--color-text-muted)] truncate">{label}</div>
       </div>
     </div>
   );

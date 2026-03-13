@@ -71,63 +71,64 @@ export default function StandortDetailPage() {
       </Link>
 
       {/* Header */}
-      <div className="bg-[var(--color-card)] rounded-lg shadow-sm border border-[var(--color-border)] p-5 mb-6">
-        <div className="flex items-start justify-between">
+      <div className="bg-[var(--color-card)] rounded-lg shadow-sm border border-[var(--color-border)] p-4 md:p-5 mb-4 md:mb-6">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
           <div>
-            <div className="flex items-center gap-3 mb-2">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
               <span className="font-mono text-sm bg-[var(--color-primary)] text-white px-3 py-1 rounded">{s.id}</span>
-              <h1 className="text-xl font-bold">{s.firma}</h1>
+              <h1 className="text-lg md:text-xl font-bold">{s.firma}</h1>
               {s.kalk_region === "Hoch" && (
                 <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full">Hoher Kalkgehalt</span>
               )}
             </div>
-            <div className="flex items-center gap-1 text-[var(--color-text-muted)] mb-1">
-              <MapPin size={16} />
+            <div className="flex flex-wrap items-center gap-1 text-[var(--color-text-muted)] text-sm mb-1">
+              <MapPin size={14} />
               <span>{s.strasse}, {s.plz} {s.ort}</span>
               <span className="mx-1">•</span>
               <span className="font-medium">{s.region}, {s.kanton}</span>
             </div>
-            <div className="flex items-center gap-1 text-[var(--color-text-muted)] text-sm">
+            <div className="flex flex-wrap items-center gap-1 text-[var(--color-text-muted)] text-xs md:text-sm">
               <Key size={14} />
               <span>Zugang: {s.zugang_schluessel}</span>
-              <span className="mx-1">•</span>
+              <span className="hidden md:inline mx-1">•</span>
+              <br className="md:hidden" />
               <Droplets size={14} />
               <span>Kalkgehalt: {s.kalk_region}</span>
             </div>
             {s.notizen && <p className="text-sm mt-2 bg-yellow-50 p-2 rounded text-yellow-800">{s.notizen}</p>}
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex gap-2 md:flex-col">
             <a href={mapsUrl} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-[var(--color-primary)] text-white px-4 py-2 rounded-lg text-sm hover:bg-[var(--color-primary-light)] transition-colors">
-              <Navigation size={16} /> Route von Regensdorf
+              className="flex items-center gap-2 bg-[var(--color-primary)] text-white px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm hover:bg-[var(--color-primary-light)] transition-colors flex-1 md:flex-none justify-center">
+              <Navigation size={16} /> <span className="hidden sm:inline">Route von</span> Regensdorf
             </a>
             <a href={`https://www.google.com/maps/search/?api=1&query=${s.latitude},${s.longitude}`}
               target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 border border-[var(--color-border)] px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-              <ExternalLink size={16} /> Google Maps öffnen
+              className="flex items-center gap-2 border border-[var(--color-border)] px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm hover:bg-gray-50 transition-colors flex-1 md:flex-none justify-center">
+              <ExternalLink size={16} /> Google Maps
             </a>
           </div>
         </div>
       </div>
 
       {/* Map */}
-      <div className="bg-[var(--color-card)] rounded-lg shadow-sm border border-[var(--color-border)] mb-6 overflow-hidden">
+      <div className="bg-[var(--color-card)] rounded-lg shadow-sm border border-[var(--color-border)] mb-4 md:mb-6 overflow-hidden">
         <button onClick={() => setShowMap(!showMap)}
           className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
           <span className="font-semibold flex items-center gap-2"><MapPin size={18} /> Karte</span>
           {showMap ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
         </button>
         {showMap && (
-          <div className="h-[300px] border-t border-[var(--color-border)]">
+          <div className="h-[200px] md:h-[300px] border-t border-[var(--color-border)]">
             <iframe src={embedUrl} width="100%" height="100%" style={{ border: 0 }} loading="lazy" />
           </div>
         )}
       </div>
 
       {/* Kontakte */}
-      <div className="bg-[var(--color-card)] rounded-lg shadow-sm border border-[var(--color-border)] p-5 mb-6">
-        <h2 className="font-semibold text-lg mb-4 flex items-center gap-2"><User size={18} /> Kontakte</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="bg-[var(--color-card)] rounded-lg shadow-sm border border-[var(--color-border)] p-4 md:p-5 mb-4 md:mb-6">
+        <h2 className="font-semibold text-lg mb-3 md:mb-4 flex items-center gap-2"><User size={18} /> Kontakte</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {kontakte.map((k) => (
             <div key={k.id} className="border border-[var(--color-border)] rounded-lg p-3">
               <div className="flex items-center gap-2 mb-2">
@@ -154,10 +155,10 @@ export default function StandortDetailPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-4 bg-[var(--color-card)] rounded-lg p-1 border border-[var(--color-border)] w-fit">
+      <div className="flex gap-1 mb-4 bg-[var(--color-card)] rounded-lg p-1 border border-[var(--color-border)] w-full md:w-fit overflow-x-auto">
         {(["info", "auftraege", "historie"] as const).map((tab) => (
           <button key={tab} onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+            className={`px-3 md:px-4 py-2 rounded-md text-xs md:text-sm font-medium transition-colors whitespace-nowrap flex-1 md:flex-none text-center ${
               activeTab === tab ? "bg-[var(--color-primary)] text-white" : "text-[var(--color-text-muted)] hover:bg-gray-100"
             }`}>
             {tab === "info" ? "Anlagen" : tab === "auftraege" ? "Aufträge & Angebote" : "Historie"}
@@ -195,8 +196,8 @@ export default function StandortDetailPage() {
 
       {/* Aufträge Tab */}
       {activeTab === "auftraege" && (
-        <div className="bg-[var(--color-card)] rounded-lg shadow-sm border border-[var(--color-border)]">
-          <table className="w-full text-sm">
+        <div className="bg-[var(--color-card)] rounded-lg shadow-sm border border-[var(--color-border)] overflow-x-auto">
+          <table className="w-full text-sm min-w-[700px]">
             <thead className="bg-gray-50 text-left">
               <tr>
                 <th className="px-4 py-3 font-medium">Typ</th>

@@ -1,13 +1,13 @@
 {
-  "/api/seed/route": "app/api/seed/route.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/api/dashboard/route": "app/api/dashboard/route.js",
+  "/api/seed/route": "app/api/seed/route.js",
   "/api/auftraege/route": "app/api/auftraege/route.js",
   "/api/standorte/[id]/route": "app/api/standorte/[id]/route.js",
   "/api/standorte/route": "app/api/standorte/route.js",
+  "/api/dashboard/route": "app/api/dashboard/route.js",
   "/auftraege/page": "app/auftraege/page.js",
-  "/routen/page": "app/routen/page.js",
   "/page": "app/page.js",
-  "/standorte/page": "app/standorte/page.js",
-  "/standorte/[id]/page": "app/standorte/[id]/page.js"
+  "/routen/page": "app/routen/page.js",
+  "/standorte/[id]/page": "app/standorte/[id]/page.js",
+  "/standorte/page": "app/standorte/page.js"
 }

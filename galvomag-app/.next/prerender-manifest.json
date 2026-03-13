@@ -1,31 +1,6 @@
 {
   "version": 4,
   "routes": {
-    "/_not-found": {
-      "initialStatus": 404,
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "next-action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/_not-found",
-      "dataRoute": "/_not-found.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
     "/auftraege": {
       "experimentalBypassFor": [
         {
@@ -50,7 +25,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/standorte": {
+    "/": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -63,8 +38,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/standorte",
-      "dataRoute": "/standorte.rsc",
+      "srcRoute": "/",
+      "dataRoute": "/index.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -98,7 +73,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/": {
+    "/standorte": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -111,8 +86,33 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/",
-      "dataRoute": "/index.rsc",
+      "srcRoute": "/standorte",
+      "dataRoute": "/standorte.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/_not-found": {
+      "initialStatus": 404,
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/_not-found",
+      "dataRoute": "/_not-found.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -126,8 +126,8 @@
   "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "28b76bd0a21c89d761098acb9271a692",
-    "previewModeSigningKey": "2aab966b5d0114269c8619fcddbbc82a72d8f31d99e3b705b02b308007e74dbd",
-    "previewModeEncryptionKey": "46682cc7df4e4b0c8a53c383c4b010c0d304083e41cfae28547161f1a062ed78"
+    "previewModeId": "bd1d26648a542e5e7d3f52d94279d095",
+    "previewModeSigningKey": "ea0f85831431da143ebfbf3ace827347b73b17010eb839cef81fb8d35e02b73e",
+    "previewModeEncryptionKey": "8496d20e9b8d803be8ccca11048857ff500cf0c0ff4e692ac4c025378e9e3c89"
   }
 }
