@@ -1,0 +1,13 @@
+{
+  "/api/seed/route": "/api/seed",
+  "/_not-found/page": "/_not-found",
+  "/api/dashboard/route": "/api/dashboard",
+  "/api/auftraege/route": "/api/auftraege",
+  "/api/standorte/[id]/route": "/api/standorte/[id]",
+  "/api/standorte/route": "/api/standorte",
+  "/auftraege/page": "/auftraege",
+  "/routen/page": "/routen",
+  "/page": "/",
+  "/standorte/page": "/standorte",
+  "/standorte/[id]/page": "/standorte/[id]"
+}
